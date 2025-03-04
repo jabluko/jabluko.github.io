@@ -1,7 +1,9 @@
 import requests
+import time
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
 from duckduckgo_search import DDGS
+from googlesearch import search
 
 def sub_site(name, file_name):
     sub_site = open(f"{file_name}.md", 'w')
@@ -33,23 +35,12 @@ for nr, row in enumerate(table.find_all("tr")):
 
     name = elements[4].text
     file_name = name.replace('/', '_')
-    #sub_site(name, file_name)
+    sub_site(name, file_name)
 
-    main_site.write(f"{nr}. ")
+    main_site.write(f"{nr + 1}. ")
     main_site.write(f"![]({base_source}{elements[3].find("img").get("src")})\n")
-    main_site.write(f"[{name}]({file_name})\\\n")
-    main_site.write(f"rating: {elements[5]}\n")
+    main_site.write(f"[{name}](/project1/{file_name})\n")
 
-    prompt = f"\"The {name} Programming Language site:{url}\""
-    found = list(DDGS().text(keywords=prompt, max_results=1))
-    if not found:
-        continue
-
-    lan_url = found[0]["href"]
-    print(lan_url)
-    lan_site=requests.get(lan_url)
-    additional = BeautifulSoup(lan_site.text, "html.parser")
-    facts = additional.find_all("p")
-    #print(facts)
-    #![alt text](image.jpg)
-    #[title](https://www.example.com)
+    main_site.write(f"rating: {elements[5].text}\n")
+    #break
+    #time.sleep(2)
