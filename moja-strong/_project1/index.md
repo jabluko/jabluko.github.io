@@ -1,7 +1,6 @@
 ---
 layout: default
 title: index
-permalink: index
 ---
 
 # Najpopularniejsze języki programowania
