@@ -35,11 +35,12 @@ for nr, row in enumerate(table.find_all("tr")):
 
     name = elements[4].text
     file_name = name.replace('/', '_')
+    file_name = file_name.replace(' ', '_')
     sub_site(name, file_name)
 
     main_site.write(f"{nr + 1}. ")
     main_site.write(f"![]({base_source}{elements[3].find("img").get("src")})\n")
-    main_site.write(f"[{name}](/project1/{file_name})\n")
+    main_site.write(f"[{name}](/{file_name})\n")
 
     main_site.write(f"rating: {elements[5].text}\n")
     #break
