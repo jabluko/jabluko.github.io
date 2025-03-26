@@ -1,0 +1,17 @@
+
+--wyświetla tylko gdy coś--
+@media (max-width: 800px) {
+
+    #nasz:element {
+    display: none 
+    }
+}
+
+--zmienia coś gdy najedziemy
+#nasz:element:hover {
+    background-color: red;
+}
+
+.container {
+    
+}

@@ -1,0 +1,106 @@
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Dokumentacja dla kontrybujących</title>
+    <link rel="stylesheet" href="/assets/styles.css">
+    <script src="/assets/js/toggleSidebar.js">
+    </script>
+</head>
+
+<body onload="setUpSidebar()" class="flex flex-col h-full w-full">
+    <div class="basis-16 w-full flex-none">
+        <header class="flex-none bg-amber-200 w-screen p-2 isolate flex items-center text-blue-800 pl-7">
+            <a href="/dev/" class="text-blue-950 text-5xl font-bold">Bibliokaczka</a>
+            <img src="/assets/rubber_ducky.svg" class="h-auto p-5">
+        </header>
+    </div>
+
+    <div class="grow">
+        <div class="flex flex-row w-full h-full">
+            <aside id="sidebar"
+                class="relative left-0 w-60 flex-none duration-200 ease-initial block overflow-y-scroll bg-cyan-200 whitespace-nowrap h-full">
+                <button type="button" onclick="Sidebar.hide()" class="relative float-right">
+                    <img src="/assets/cross.svg" alt="Cross button" class="size-8 m-2">
+                </button>
+                <div class="static ml-3 m-2 text-xl">
+                    <nav class="flex flex-col">
+                        <div class="items-center">
+                            <a href="/dev/#Introduction">Wprowadzenie</a>
+                        </div>
+
+                        <div class="items-center">
+                            <a href="/dev/#Structure">Struktura</a>
+                        </div>
+
+                        <div class="items-center">
+                            <a href="/dev/style">Styl kodu</a>
+                        </div>
+
+                        <div class="items-center">
+                            <a href="/dev/#Tests">Testy</a>
+                        </div>
+                    </nav>
+
+                </div>
+            </aside>
+
+            <div id="right-to-sidebar"
+                class="isolate screen grow bg-amber-100 text-blue-950 overflow-y-scroll pl-5 h-full">
+                
+                <button type="button" onclick="Sidebar.toggle()" class="inline-flex items-center z-10">
+                    <img src="/assets/sidebar.svg" alt="Cross button" class="size-15 m-4  ml-0">
+                    <span class="font-bold text-2xl">Menu</span>
+                </button>
+                <main id="main" class="pr-10 h-full">
+    <section id="Introduction">
+        <h2 class="text-green-950"> Wprowadzenie </h2>
+        <p class="text-green-800">
+            Kod projektu wraz z dokumentacją znajduje się w <a href="https://git.staszic.waw.pl/jabluko/staszic-library"
+                class="hover:text-green-600 text-green-700">repozytorium na staszicowym gitlabie</a>
+        </p>
+    </section>
+
+    <section id="Structure">
+        <h2>Struktura projektu</h2>
+
+        Projekt składa się z następujących modułów:
+        <ul>
+            <li><a href="/dev/modules/graph/">graph</a></li>
+            <!--<li><a href="/dev/modules/geometry/">geometry</a></li>
+            <li><a href="/dev/modules/io/">io</a></li>
+            <li><a href="/dev/modules/math/">math</a></li>
+            <li><a href="/dev/modules/random/">random</a></li>
+            <li><a href="/dev/modules/sequences/">sequences</a></li>
+            <li><a href="/dev/modules/test_library/">test_library</a></li>
+            <li><a href="/dev/modules/testers/">testers</a></li>
+            <li><a href="/dev/modules/types/">types</a></li>
+            <li><a href="/dev/modules/utility/">utility</a></li>-->
+        </ul>
+
+        <p>
+            Każdy z modułów składa się z dwóch części: kodu źródłowego i testów. Ponadto w każdym z nich znajduje
+            się <em>wygenerowany</em> plik cmake. W związku z tym nie zaleca się bezpośredniej zmiany plików cmake
+            wewnątrz modułu. W tym pliku znajdują się informacje o wzajemnej zależności testów. Ctest wykorzystuje to do ustalenia kolejności testów.
+        </p>
+    </section>
+
+    <section id="Tests">
+        <h2>Testy</h2>
+        <p>
+            Podstawowemu testowaniu podlegają wszystkie zaimplementowane funkcje. Pomaga to w wyeliminowaniu podstawowych błędów. Dogłębnie przetestowane powinny zostać wszystkie istotne.
+        </p>
+
+        <p>
+            Do sprawdzania poprawności rozkładu losowego przydatne są funkcje z <a href="/dev/modules/testers/"> modułu
+                testers</a>
+        </p>
+    </section>
+</main>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

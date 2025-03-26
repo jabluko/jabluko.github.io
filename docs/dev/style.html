@@ -1,0 +1,143 @@
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Style</title>
+    <link rel="stylesheet" href="/assets/styles.css">
+    <script src="/assets/js/toggleSidebar.js">
+    </script>
+</head>
+
+<body onload="setUpSidebar()" class="flex flex-col h-full w-full">
+    <div class="basis-16 w-full flex-none">
+        <header class="flex-none bg-amber-200 w-screen p-2 isolate flex items-center text-blue-800 pl-7">
+            <a href="/dev/" class="text-blue-950 text-5xl font-bold">Bibliokaczka</a>
+            <img src="/assets/rubber_ducky.svg" class="h-auto p-5">
+        </header>
+    </div>
+
+    <div class="grow">
+        <div class="flex flex-row w-full h-full">
+            <aside id="sidebar"
+                class="relative left-0 w-60 flex-none duration-200 ease-initial block overflow-y-scroll bg-cyan-200 whitespace-nowrap h-full">
+                <button type="button" onclick="Sidebar.hide()" class="relative float-right">
+                    <img src="/assets/cross.svg" alt="Cross button" class="size-8 m-2">
+                </button>
+                <div class="static ml-3 m-2 text-xl">
+                    <nav class="flex flex-col">
+                        <div class="items-center">
+                            <a href="/dev/#Introduction">Wprowadzenie</a>
+                        </div>
+
+                        <div class="items-center">
+                            <a href="/dev/#Structure">Struktura</a>
+                        </div>
+
+                        <div class="items-center">
+                            <a href="/dev/style">Styl kodu</a>
+                        </div>
+
+                        <div class="items-center">
+                            <a href="/dev/#Tests">Testy</a>
+                        </div>
+                    </nav>
+
+                </div>
+            </aside>
+
+            <div id="right-to-sidebar"
+                class="isolate screen grow bg-amber-100 text-blue-950 overflow-y-scroll pl-5 h-full">
+                
+                <a href="/dev/index/" class="back-button relative top-2 inline-flex items-center">
+                    <img src="/assets/back_arrow.svg" class="size-5">
+                    <span class="pl-1 text-base">back</span>
+                </a>
+                <br>
+                
+                <button type="button" onclick="Sidebar.toggle()" class="inline-flex items-center z-10">
+                    <img src="/assets/sidebar.svg" alt="Cross button" class="size-15 m-4  ml-0">
+                    <span class="font-bold text-2xl">Menu</span>
+                </button>
+                <main class="pr-10 h-full">
+    <section id="Bad-practice">
+        <h2> Złe praktyki </h2>
+        <div>
+            c-style cast: <code>(type)(expresion)</code>
+            <br>
+            Przyczyna:  jest on niebezpieczny i robi więcej rzeczy niż nie można spodziewać.
+            <br>
+            Rozwiązanie:  zamiast tego należy użyć odpowiedniego castowania np. static_cast, std::bit_cast.
+        </div>
+    </section>
+    <section id="Code-style">
+        <h2>Formatowanie kodu</h2>
+        <h3>Trudności</h3>
+        <p>
+            W języku c++ nie ma ogólnie przyjętego stylu formatowania kodu jak jest to w innych językach
+            programowania, przykładowo camelCase w Javie lub snake_case w Pythonie. Złożoność języka znacząco
+            utrudnia ustalenie jednego,
+            spójnego stylu.
+        </p>
+
+        <h3>Rozwiązanie</h3>
+        <p>
+            Jako rozwiązanie do powyższych problemów przyjąłem następujące rozwiązanie:<br>
+        </p>
+        <table class="table-auto border-separate border-spacing-1 rounded-lg text-left">
+            <thead class="bg-blue-700 text-amber-100 font-semibold">
+                <tr>
+                    <th scope="col" class="px-4 py-2 border border-blue-900">Miejsce w
+                        kodzie</th>
+                    <th scope="col" class="px-4 py-2 border border-blue-900">Formatowanie
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="bg-blue-300 ">
+                <tr class="">
+                    <td class="px-4 py-2 border border-blue-900">zmienne</td>
+                    <td class="px-4 py-2 border border-blue-900">snake_case</td>
+                </tr>
+                <tr class="">
+                    <td class="px-4 py-2 border border-blue-900">funkcje</td>
+                    <td class="px-4 py-2 border border-blue-900">camelCase</td>
+                </tr>
+                <tr class="">
+                    <td class="px-4 py-2 border border-blue-900">namespace</td>
+                    <td class="px-4 py-2 border border-blue-900">snake_case</td>
+                </tr>
+                <tr class="">
+                    <td class="px-4 py-2 border border-blue-900">klasy</td>
+                    <td class="px-4 py-2 border border-blue-900">PascalCase</td>
+                </tr>
+                <tr class="">
+                    <td class="px-4 py-2 border border-blue-900">metody</td>
+                    <td class="px-4 py-2 border border-blue-900">camelCase</td>
+                </tr>
+                <tr class="">
+                    <td class="px-4 py-2 border border-blue-900">typy składowe</td>
+                    <td class="px-4 py-2 border border-blue-900">snake_case_type</td>
+                </tr>
+                <tr class="">
+                    <td class="px-4 py-2 border border-blue-900">aliasy typów</td>
+                    <td class="px-4 py-2 border border-blue-900">snake_case_t</td>
+                </tr>
+                <tr class="">
+                    <td class="px-4 py-2 border border-blue-900">koncepty</td>
+                    <td class="px-4 py-2 border border-blue-900">PascalCaseLike</td>
+                </tr>
+                <tr>
+                    <td class="px-4 py-2 border border-blue-900">parametry szablonów</td>
+                    <td class="px-4 py-2 border border-blue-900">PascalCaseT</td>
+                </tr>
+            </tbody>
+        </table>
+
+    </section>
+</main>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

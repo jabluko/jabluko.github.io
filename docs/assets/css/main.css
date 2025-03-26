@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+@layer base {
+    body {
+        @apply text-lg/7
+    }
+
+    a {
+        @apply text-gray-950 hover:text-gray-600
+    }
+
+    section {
+        @apply pt-6
+    }
+
+    h1 {
+        @apply text-5xl/15 font-bold
+    }
+
+    h2 {
+        @apply text-3xl/15 font-bold
+    }
+}
