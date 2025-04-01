@@ -298,6 +298,9 @@
   .basis-13 {
     flex-basis: calc(var(--spacing) * 13);
   }
+  .basis-15 {
+    flex-basis: calc(var(--spacing) * 15);
+  }
   .basis-16 {
     flex-basis: calc(var(--spacing) * 16);
   }
