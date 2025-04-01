@@ -13,59 +13,58 @@
         <header class="flex-none bg-amber-200 w-screen p-2 isolate flex items-center text-blue-800 pl-7">
             <a href="/dev/" class="text-blue-950 text-5xl font-bold">Bibliokaczka</a>
             <img src="/assets/rubber_ducky.svg" class="h-auto p-5">
+            <img src="/assets/rubber_ducky.svg" class="bottom-0 size-3 animate-ping opacity-75">
         </header>
     </div>
 
-    <div class="grow">
+    <div class="grow bg-amber-100 text-blue-950">
         <div class="flex flex-row w-full h-full">
-            <aside id="sidebar"
-                class="relative left-0 w-60 flex-none duration-200 ease-initial block overflow-y-scroll bg-cyan-200 whitespace-nowrap h-full">
-                <button type="button" onclick="Sidebar.hide()" class="relative float-right">
-                    <img src="/assets/cross.svg" alt="Cross button" class="size-8 m-2">
-                </button>
-                <div class="static ml-3 m-2 text-xl">
-                    <nav class="flex flex-col">
-                        <div class="items-center">
-                            <a href="/dev/#Introduction">Wprowadzenie</a>
-                        </div>
-
-                        <div class="items-center">
-                            <a href="/dev/#Structure">Struktura</a>
-                        </div>
-
-                        <div class="items-center">
-                            <a href="/dev/style">Styl kodu</a>
-                        </div>
-
-                        <div class="items-center">
-                            <a href="/dev/#Tests">Testy</a>
-                        </div>
-                    </nav>
-
+    <aside id="sidebar" class="sidebar">
+        <button type="button" onclick="Sidebar.hide()" class="relative float-right">
+            <img src="/assets/cross.svg" alt="Cross button" class="size-8 m-2">
+        </button>
+        <div class="static ml-3 m-2 text-xl">
+            <nav class="flex flex-col">
+                <div class="items-center">
+                    <a href="/dev/#Introduction">Wprowadzenie</a>
                 </div>
-            </aside>
 
-            <div id="right-to-sidebar"
-                class="isolate screen grow bg-amber-100 text-blue-950 overflow-y-scroll pl-5 h-full">
-                
-                <a href="/dev/index/" class="back-button relative top-2 inline-flex items-center">
-                    <img src="/assets/back_arrow.svg" class="size-5">
-                    <span class="pl-1 text-base">back</span>
-                </a>
-                <br>
-                
-                <button type="button" onclick="Sidebar.toggle()" class="inline-flex items-center z-10">
-                    <img src="/assets/sidebar.svg" alt="Cross button" class="size-15 m-4  ml-0">
-                    <span class="font-bold text-2xl">Menu</span>
-                </button>
-                <section id="EdgeSupport">
-    <div class="box-content border-8 w-100">
+                <div class="items-center">
+                    <a href="/dev/#Structure">Struktura</a>
+                </div>
+
+                <div class="items-center">
+                    <a href="/dev/style">Styl kodu</a>
+                </div>
+
+                <div class="items-center">
+                    <a href="/dev/#Tests">Testy</a>
+                </div>
+            </nav>
+
+        </div>
+    </aside>
+
+    <div id="right-to-sidebar" class="isolate screen grow bg-amber-100 text-blue-950 overflow-y-scroll pl-5 h-full">
+        
+        <a href="/dev/" class="back-button relative top-2 inline-flex items-center">
+            <img src="/assets/back_arrow.svg" class="size-5">
+            <span class="pl-1 text-base">back</span>
+        </a>
+        <br>
+        
+        <button type="button" onclick="Sidebar.toggle()" class="inline-flex items-center z-10">
+            <img src="/assets/sidebar.svg" alt="Cross button" class="size-15 m-4  ml-0">
+            <span class="font-bold text-2xl">Menu</span>
+        </button>
+        <section id="EdgeSupport">
+    <div class="code-block w-100">
         <code>concept EdgeDirectionLike</code> -- definiujący kierunek krawędzi, wraz z potencjalną wagą.
     </div>
 
     <br>
 
-    <div>
+    <div class="code-block">
         <code>concept EdgeLike</code> -- concept definiujący krawędź, z wyróżnionym początkiem(source) i końcem(target)
         i potencjalną wagą.
     </div>
@@ -73,13 +72,13 @@
 
     <br>
 
-    <div>
+    <div class="code-block">
         <code>DirectableEdge</code> -- concept definiujący możliwość krawędzi do porzucenia punktu startowego.
     </div>
 
     <br>
 
-    <div>
+    <div class="code-block">
         <code>getDirection(Edge)</code> -- funkcja pozwalająca wyciągnąć kierunek z danej krawędzi. Zauważmy, że działa
         niezależnie
         od spełnienia DirectableEdge.
@@ -87,7 +86,7 @@
 
     <br>
 
-    <div>
+    <div class="code-block">
         <code>EdgeDirection</code> -- domyślna implementacja interface kieruneku krawędzi, pozwala przechowywać wagę
     </div>
     <code>Edge</code> -- domyślna implementacja interface krawędzi, pozwala przechowywać wagę
@@ -127,9 +126,15 @@
     <code>class DirectedGraph</code> --
 
 </section>
-            </div>
-        </div>
     </div>
+</div>
+    </div>
+
+    <footer class="basis-13 w-full flex-none flex flex-col content-center bg-amber-200">
+        <div class="text-center h-full font-medium content-center text-blue-950">
+            Paweł Mieszkowski cs.pawelmieszkowski@gmail.com
+        </div>
+    </footer>
 
 </body>
 

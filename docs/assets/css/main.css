@@ -6,7 +6,7 @@
     }
 
     a {
-        @apply text-gray-950 hover:text-gray-600
+        @apply font-medium text-blue-900 hover:text-blue-700
     }
 
     section {
@@ -19,5 +19,17 @@
 
     h2 {
         @apply text-3xl/15 font-bold
+    }
+
+    h3 {
+        @apply text-xl/10 font-bold
+    }
+
+    .sidebar {
+        @apply relative left-0 w-60 flex-none duration-200 ease-initial block overflow-y-scroll bg-cyan-200 whitespace-nowrap h-full
+    }
+    
+    .code-block {
+        @apply shadow-md drop-shadow-xs shadow-amber-950 box-content border-7 border-amber-300 bg-amber-200 text-blue-950
     }
 }
