@@ -4,7 +4,6 @@ from django.db.models.signals import post_save
 from django.conf import settings
 from django.dispatch import receiver
 
-# Create your models here.
 class Background(models.Model):
     title = models.CharField(max_length=100)
     image = models.ImageField(upload_to="backgrounds")

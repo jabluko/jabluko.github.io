@@ -1,50 +1,44 @@
 from rest_framework import serializers
-from .models import Route, RoutePoint, BackgroundImage
+from .models import Path, Point, Background
 from django.contrib.auth.models import User
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username']
 
 class BackgroundSerializer(serializers.ModelSerializer):
     """Prosty serializer do wyświetlania info o tle w trasie."""
     class Meta:
-        model = BackgroundImage
-        fields = ['id', 'name', 'image']
+        model = Background
+        fields = ['id', 'title', 'image']
         read_only_fields = fields
 
-class RoutePointSerializer(serializers.ModelSerializer):
-    """Serializer dla punktów trasy."""
-    route = serializers.PrimaryKeyRelatedField(read_only=True)
-    order = serializers.IntegerField(read_only=True)
-
+class PointSerializer(serializers.ModelSerializer):
     class Meta:
-        model = RoutePoint
-        fields = ['id', 'route', 'x', 'y', 'order']
-        read_only_fields = ['id', 'route', 'order']
+        model = Point
+        fields = ['id', 'path', 'x', 'y', 'order']
+        read_only_fields = ['id', 'path', 'order']
 
-class RouteSerializer(serializers.ModelSerializer):
-    """Serializer dla tras."""
-    owner = serializers.ReadOnlyField(source='owner.username')
-    points = RoutePointSerializer(many=True, read_only=True)
-    background_image = serializers.PrimaryKeyRelatedField(
-        queryset=BackgroundImage.objects.filter(is_active=True)
+class PathSerializer(serializers.ModelSerializer):
+    points = PointSerializer(many=True, read_only=True)
+    user = UserSerializer(read_only=True)
+    background = serializers.PrimaryKeyRelatedField(
+        queryset=Background.objects.all()
     )
-    background_image_details = BackgroundSerializer(source='background_image', read_only=True)
-
-
+    background_details = BackgroundSerializer(source='background', read_only=True)
+    
     class Meta:
-        model = Route
-        fields = [
-            'id',
-            'name',
-            'description',
-            'owner',
-            'background_image', # Pole do zapisu (ID)
-            'background_image_details', # Pole do odczytu (szczegóły)
-            'created_at',
-            'updated_at',
-            'points', # Lista punktów (tylko do odczytu)
-        ]
-        read_only_fields = ['id', 'owner', 'created_at', 'updated_at', 'points', 'background_image_details']
+        model = Path
+        fields = ['id', 'user', 'title', 'background', 'background_details', 'points']
+        read_only_fields = ['id', 'user', 'background_details' 'points']
 
-    def validate_background_image(self, value):
-        if not value.is_active:
-            raise serializers.ValidationError("Wybrany obraz tła jest nieaktywny.")
-        return value
+class PathCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Path
+        fields = ['title', 'background']
+
+class PointCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Point
+        fields = ['x', 'y', 'order']

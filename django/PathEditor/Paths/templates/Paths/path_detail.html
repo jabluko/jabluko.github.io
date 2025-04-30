@@ -1,57 +1,31 @@
 {% extends 'Paths/base.html' %}
 
-{% block title %}Szczegóły Trasy: {{ route.name }}{% endblock %}
+{% block title %}Szczegóły Trasy: {{ route.title }}{% endblock %}
 
 {% block content %}
-<h1>Trasa: {{ route.name }}</h1>
+<h1>Trasa: {{ route.title }}</h1>
 <p><a href="{% url 'path_list' %}">&laquo; Powrót do listy tras</a></p>
-<p><strong>Tło:</strong> {{ background_image.name }}</p>
+<p><strong>Tło:</strong> {{ background_image.title }}</p>
 
 <h2>Wizualizacja Trasy</h2>
 <div style="margin-bottom: 20px; border: 1px solid #ccc; position: relative; display: inline-block;">
-  {# Kontener z position: relative, aby SVG mogło być pozycjonowane absolutnie wewnątrz #}
-  {# Display: inline-block sprawia, że kontener dopasowuje się do rozmiaru obrazka #}
-
-  {# Wyświetlenie obrazka tła #}
-  <img id="background-img" src="{{ background_image.image.url }}" alt="Tło trasy {{ route.name }}"
+  <img id="background-img" src="{{ background_image.image.url }}" alt="Tło trasy {{ route.title }}"
     style="max-width: 100%; display: block;">
 
-  {# --- Warstwa SVG do rysowania --- #}
-  {# Sprawdzamy, czy obrazek ma wymiary, aby uniknąć błędów, jeśli obrazek się nie załadował lub nie istnieje #}
   {% if background_image.image.width and background_image.image.height %}
-  <svg width="100%" {# SVG zajmuje całą szerokość kontenera (obrazka) #} height="100%" {# SVG zajmuje całą wysokość
-    kontenera (obrazka) #} viewBox="0 0 {{ background_image.image.width }} {{ background_image.image.height }}" {#
-    Mapuje układ współrzędnych SVG na oryginalne wymiary obrazka #}
-    style="position: absolute; top: 0; left: 0; pointer-events: none;" {# Nakładka na obrazek; pointer-events: none,
-    jeśli nie chcemy, by SVG przechwytywało kliknięcia (zmienimy to później dla interaktywności) #}>
-    {# Rysowanie linii łączących punkty (polyline) #}
-    {% if points|length > 1 %} {# Rysuj linię tylko jeśli są co najmniej 2 punkty #}
+  <svg width="100%" height="100%" viewBox="0 0 {{ background_image.image.width }} {{ background_image.image.height }}"
+    style="position: absolute; top: 0; left: 0; pointer-events: none;">
+    {% if points|length > 1 %}
     <polyline points="{% for point in points %}{{ point.x }},{{ point.y }} {% endfor %}"
-      style="fill:none; stroke:red; stroke-width:3;" {# Styl linii: bez wypełnienia, czerwony kontur, grubość 3px
-      (względem viewBox) #} />
+      style="fill:none; stroke:red; stroke-width:3;" />
     {% endif %}
-
-    {# Rysowanie punktów (circles) #}
-    {% for point in points %}
-    <circle cx="{{ point.x }}" cy="{{ point.y }}" r="5" {# Promień kółka (względem viewBox) #}
-      style="fill:blue; stroke:white; stroke-width:1;" {# Styl punktów: niebieskie wypełnienie, biały kontur #} />
-    {# Opcjonalnie: Dodaj numer punktu obok #}
-    <text x="{{ point.x|add:7 }}" {# Lekko przesunięty X #} y="{{ point.y|add:5 }}" {# Lekko przesunięty Y #}
-      font-size="10" fill="yellow" stroke="black" stroke-width="0.5" style="pointer-events: none;" {# Tekst też nie
-      powinien przechwytywać kliknięć #}>
-      {{ point.order }}
-    </text>
-    {% endfor %}
   </svg>
   {% else %}
   <p style="color: red;">Nie można wyświetlić wizualizacji - brak danych o wymiarach obrazka tła.</p>
   {% endif %}
-  {# --- KONIEC WARSTWY SVG --- #}
-
 </div>
-{# --- KONIEC SEKCJI WIZUALIZACJI --- #}
 
-<hr style="clear: both;"> {# Czyści float, jeśli by był używany #}
+<hr style="clear: both;">
 <h2>Punkty trasy w kolejności</h2>
 
 {% if points %}
@@ -69,7 +43,7 @@
       <td>{{ point.x }}</td>
       <td>{{ point.y }}</td>
       <td>
-        <form action="{% url 'delete_point' point.id %}" method="post" style="display: inline;">
+        <form action="{% url 'point_delete' point.id %}" method="post" style="display: inline;">
           {% csrf_token %}
           <button type="submit" style="color: red; background: none; border: none; cursor: pointer;">[Usuń]</button>
         </form>

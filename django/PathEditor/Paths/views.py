@@ -1,13 +1,12 @@
 from django.shortcuts import HttpResponse
 from django.template import loader
+from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.db.models import Max
 
 from .forms import PathForm, PathPointForm
 from .models import Background, Path, Point
-
-# Create your views here.
 
 def home(request):
     if request.user.is_authenticated:
@@ -43,7 +42,6 @@ def select_background(request):
         'background_images': bgs,
         'current_background': user_profile.selected_background
     }
-    # Zmieniamy szablon, bo wybór tła ma teraz sens w kontekście tras
     return render(request, 'Paths/bg_select.html', context)
 
 @login_required
@@ -54,26 +52,24 @@ def path_list(request):
 
     paths = Path.objects.filter(user=user, background=selected_background)
 
-    # Formularz do tworzenia nowej trasy
     if request.method == 'POST':
-         # Sprawdź, czy tło jest wybrane przed utworzeniem trasy
         if not selected_background:
             return redirect('select_background')
 
         path_form = PathForm(request.POST)
         if path_form.is_valid():
             new_path = path_form.save(commit=False)
-            new_path.owner = user
+            new_path.user = user
             new_path.background_image = selected_background
             new_path.save()
             return redirect('path_detail', path_id=new_path.id)
     else:
-        path_form = PathForm() # Pusty formularz dla metody GET
+        path_form = PathForm()
 
     context = {
         'paths': paths,
         'selected_background': selected_background,
-        'path_form': path_form, # Dodajemy formularz do kontekstu
+        'path_form': path_form,
     }
     return render(request, 'Paths/path_list.html', context)
 
@@ -84,6 +80,7 @@ def path_create(request):
         if form.is_valid():
             path = form.save(commit=False)
             path.user = request.user
+            path.background = request.user.profile.selected_background
             path.save()
             return redirect('path_detail', path_id=path.id)
     else:
@@ -127,7 +124,29 @@ def point_add(request, path_id):
 
 @login_required
 def point_delete(request, point_id):
-    point = get_object_or_404(pathPoint, id=point_id, path__user=request.user)
+    point = get_object_or_404(Point, id=point_id)
+    if point.path.user != request.user:
+        return redirect('path_list')
     path_id = point.path.id
     point.delete()
     return redirect('path_detail', path_id=path_id)
+
+@login_required
+def delete_path(request, path_id):
+    path = get_object_or_404(Path, id=path_id, user=request.user)
+    path_name = path.name
+    if request.method == 'POST':
+        path.delete()
+        return redirect('path_list')
+    return redirect('path_list')
+
+
+def register(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')
+    else:
+        form = UserCreationForm()
+    return render(request, 'registration/register.html', {'form': form})

@@ -19,19 +19,19 @@
         <h3>Utwórz nową trasę dla tego tła</h3>
         <form method="post" action="{% url 'path_create' %}">
             {% csrf_token %}
-            {{ route_form.as_p }}
+            {{ path_form.as_p }}
             <button type="submit">Utwórz Trasę</button>
         </form>
         <hr>
 
         <h3>Lista tras dla wybranego tła:</h3>
             <ul>
-                {% for route in routes %}
+                {% for path in paths %}
                     <li>
-                        <a href="{% url 'route_detail' route.id %}">{{ route.name }}</a>
-                        <form action="{% url 'delete_route' route.id %}" method="post" style="display: inline; margin-left: 10px;">
+                        <a href="{% url 'path_detail' path.id %}">{{ path }}</a>
+                        <form action="{% url 'delete_path' path.id %}" method="post" style="display: inline; margin-left: 10px;">
                             {% csrf_token %}
-                            <button type="submit" onclick="return confirm('Czy na pewno chcesz usunąć trasę \'{{ route.name }}\'?');" style="color: red; background: none; border: none; cursor: pointer;">[Usuń]</button>
+                            <button type="submit" onclick="return confirm('Czy na pewno chcesz usunąć trasę \'{{ path.name }}\'?');" style="color: red; background: none; border: none; cursor: pointer;">[Usuń]</button>
                         </form>
                     </li>
                 {% empty %}
