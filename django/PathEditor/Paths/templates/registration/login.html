@@ -1,0 +1,38 @@
+{% extends 'Paths/base.html' %}
+
+{% block title %}Log in{% endblock %}
+
+{% block content %}
+  <h2>Log in</h2>
+
+  {% if form.errors %}
+    <p style="color: red;">Log in failed please try again</p>
+  {% endif %}
+
+  {% if next %}
+    {% if user.is_authenticated %}
+      <p>You don't have permission to access this site</p>
+    {% else %}
+      <p>Log in to access this site.</p>
+    {% endif %}
+  {% endif %}
+
+  <form method="post" action="{% url 'login' %}">
+    {% csrf_token %}
+
+    <p>
+        <label for="id_username">Username:</label>
+        {{ form.username }}
+    </p>
+    <p>
+        <label for="id_password">Password:</label>
+        {{ form.password }}
+    </p>
+
+    <button type="submit">Log in</button>
+    <input type="hidden" name="next" value="{{ next }}">
+  </form>
+
+  <p><a href="{% url 'password_reset' %}">Forgot password?</a></p>
+
+{% endblock %}

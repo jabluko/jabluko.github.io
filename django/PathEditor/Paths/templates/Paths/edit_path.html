@@ -1,0 +1,20 @@
+{% extends 'Paths/base.html' %}
+
+{% block title %}Edytuj Trasę: {{ route.name }}{% endblock %}
+
+{% block content %}
+    <h1>Edytuj Trasę: {{ route.name }}</h1>
+    <p><a href="{% url 'route_detail' route.id %}">&laquo; Anuluj i wróć do szczegółów trasy</a></p>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="messages {{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Zapisz Zmiany</button>
+    </form>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'Paths/base.html' %}
+
+{% block title %}Wybierz Tło{% endblock %}
+
+{% block content %}
+
+    <form method="post">
+        {% csrf_token %} {# Zabezpieczenie CSRF #}
+
+        <hr>
+
+        <h2>Dostępne tła:</h2>
+        {% if background_images %}
+            <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+                {% for bg in background_images %}
+                    <div style="border: 1px solid #eee; padding: 10px; text-align: center;">
+                        <label for="bg_{{ bg.id }}">
+                            <img src="{{ bg.image.url }}" alt="{{ bg.name }}" width="200" style="display: block; margin-bottom: 10px; cursor: pointer;">
+                            <input type="radio" name="background_id" value="{{ bg.id }}" id="bg_{{ bg.id }}"
+                                {% if current_background and current_background.id == bg.id %}checked{% endif %}>
+                            {{ bg.name }}
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <button type="submit" style="margin-top: 20px; padding: 10px 20px;">Zapisz wybór</button>
+        {% else %}
+            <p>Obecnie nie ma dostępnych żadnych teł. Administrator musi je dodać.</p>
+        {% endif %}
+
+    </form>
+{% endblock %}

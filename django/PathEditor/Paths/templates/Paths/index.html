@@ -1,0 +1,15 @@
+{% load static %}
+{% if bg_list %}
+    <ul>
+    {% for bg in bg_list %}
+        <li>{{ bg.title }}</li>
+        {% if bg.image %}
+        <img src="{{ bg.image.url }}" width="100" height="100">
+        {% else %}
+        <span> no photo </span>
+        {% endif %}
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No polls are available.</p>
+{% endif %}

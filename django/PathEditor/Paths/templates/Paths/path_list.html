@@ -1,0 +1,46 @@
+{% extends 'Paths/base.html' %}
+
+{% block title %}Twoje Trasy{% endblock %}
+
+{% block content %}
+    <h1>Twoje Trasy</h1>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="messages {{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    {% if selected_background %}
+        <h2>Trasy dla tła: {{ selected_background.name }}</h2>
+        <img src="{{ selected_background.image.url }}" alt="{{ selected_background.name }}" style="max-width: 300px; height: auto; margin-bottom: 20px; border: 1px solid #ccc;">
+
+        <hr>
+        <h3>Utwórz nową trasę dla tego tła</h3>
+        <form method="post" action="{% url 'path_create' %}">
+            {% csrf_token %}
+            {{ route_form.as_p }}
+            <button type="submit">Utwórz Trasę</button>
+        </form>
+        <hr>
+
+        <h3>Lista tras dla wybranego tła:</h3>
+            <ul>
+                {% for route in routes %}
+                    <li>
+                        <a href="{% url 'route_detail' route.id %}">{{ route.name }}</a>
+                        <form action="{% url 'delete_route' route.id %}" method="post" style="display: inline; margin-left: 10px;">
+                            {% csrf_token %}
+                            <button type="submit" onclick="return confirm('Czy na pewno chcesz usunąć trasę \'{{ route.name }}\'?');" style="color: red; background: none; border: none; cursor: pointer;">[Usuń]</button>
+                        </form>
+                    </li>
+                {% empty %}
+                    <li>Brak tras dla tego tła. Utwórz nową powyżej.</li>
+                {% endfor %}
+            </ul>
+
+    {% else %}
+        <h2>Nie wybrano tła</h2>
+        <p>Aby tworzyć i przeglądać trasy, najpierw <a href="{% url 'select_background' %}">wybierz obraz tła</a>.</p>
+    {% endif %}
+{% endblock %}
