@@ -5,54 +5,35 @@ from django.shortcuts import get_object_or_404
 from django.db.models import Max
 
 from .models import Path, Point, Background
-from .serializers import PathSerializer, PathSerializer, BackgroundSerializer
+from .serializers import PathSerializer, PointSerializer, BackgroundSerializer
 from .permissions import IsOwner
 from rest_framework.exceptions import PermissionDenied
-
-@api_view(['GET'])
-def get_backgrounds(request, background_id):
-    bg = Background.objects.get(id=background_id)
-    return Response(BackgroundSerializer(bg).data)
-
 
 class PathViewSet(viewsets.ModelViewSet):
     serializer_class = PathSerializer
     permission_classes = [permissions.IsAuthenticated, IsOwner]
 
     def get_queryset(self):
-        return Path.objects.filter(user=self.request.user).prefetch_related('points', 'background_image')
+        # Return only paths owned by the authenticated user
+        return Path.objects.filter(user=self.request.user)
 
     def perform_create(self, serializer):
+        # Automatically associate the path with the authenticated user
         serializer.save(user=self.request.user)
 
-class PathViewSet(viewsets.ModelViewSet):
-    serializer_class = PathSerializer
-    permission_classes = [permissions.IsAuthenticated]
+
+class PointViewSet(viewsets.ModelViewSet):
+    serializer_class = PointSerializer
+    permission_classes = [permissions.IsAuthenticated, IsOwner]
 
     def get_queryset(self):
-        path_id = self.kwargs.get('path_id')
-        
-        if getattr(self, 'swagger_fake_view', False):
-            return Path.objects.none()
-        path = get_object_or_404(Path, id=path_id, user=self.request.user)
-        return Path.objects.filter(path=path).order_by('order')
+        # Ensure points belong to the authenticated user's paths
+        path = get_object_or_404(Path, id=self.kwargs['path_pk'], user=self.request.user)
+        return Point.objects.filter(path=path)
 
     def perform_create(self, serializer):
-        path_id = self.kwargs.get('path_id')
-        path = get_object_or_404(path, id=path_id, user=self.request.user)
-
-        last_point_order = path.objects.filter(Path=path).aggregate(Max('order'))['order__max']
-        next_order = (last_point_order or 0) + 1
-
-        serializer.save(Path=path, order=next_order)
-
-    def perform_update(self, serializer):
-        point = serializer.instance
-        if point.path.user != self.request.user:
-            raise permissions.PermissionDenied("Nie masz uprawnień do modyfikacji punktów tej trasy.")
-        serializer.save()
-
-    def perform_destroy(self, instance):
-        if instance.path.user != self.request.user:
-            raise permissions.PermissionDenied("Nie masz uprawnień do usuwania punktów tej trasy.")
-        instance.delete()
+        # Automatically associate the point with the correct path
+        path = get_object_or_404(Path, id=self.kwargs['path_pk'], user=self.request.user)
+        # Automatically assign the next order if not provided
+        max_order = Point.objects.filter(path=path).aggregate(Max('order'))['order__max'] or 0
+        serializer.save(path=path, order=max_order + 1)

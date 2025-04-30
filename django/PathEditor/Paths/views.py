@@ -38,11 +38,10 @@ def select_background(request):
 
 
 
-    context = {
-        'background_images': bgs,
+    return render(request, 'Paths/bg_select.html', {
+        'backgrounds': bgs,
         'current_background': user_profile.selected_background
-    }
-    return render(request, 'Paths/bg_select.html', context)
+    })
 
 @login_required
 def path_list(request):
@@ -60,7 +59,7 @@ def path_list(request):
         if path_form.is_valid():
             new_path = path_form.save(commit=False)
             new_path.user = user
-            new_path.background_image = selected_background
+            new_path.background = selected_background
             new_path.save()
             return redirect('path_detail', path_id=new_path.id)
     else:
@@ -107,7 +106,7 @@ def path_detail(request, path_id):
         'path': path,
         'points': points,
         'point_form': point_form,
-        'background_image': path.background
+        'background': path.background
     })
 
 

@@ -5,15 +5,15 @@
 {% block content %}
 <h1>Trasa: {{ route.title }}</h1>
 <p><a href="{% url 'path_list' %}">&laquo; Powrót do listy tras</a></p>
-<p><strong>Tło:</strong> {{ background_image.title }}</p>
+<p><strong>Tło:</strong> {{ background.title }}</p>
 
 <h2>Wizualizacja Trasy</h2>
 <div style="margin-bottom: 20px; border: 1px solid #ccc; position: relative; display: inline-block;">
-  <img id="background-img" src="{{ background_image.image.url }}" alt="Tło trasy {{ route.title }}"
+  <img id="background-img" src="{{ background.image.url }}" alt="Tło trasy {{ route.title }}"
     style="max-width: 100%; display: block;">
 
-  {% if background_image.image.width and background_image.image.height %}
-  <svg width="100%" height="100%" viewBox="0 0 {{ background_image.image.width }} {{ background_image.image.height }}"
+  {% if background.image.width and background.image.height %}
+  <svg width="100%" height="100%" viewBox="0 0 {{ background.image.width }} {{ background.image.height }}"
     style="position: absolute; top: 0; left: 0; pointer-events: none;">
     {% if points|length > 1 %}
     <polyline points="{% for point in points %}{{ point.x }},{{ point.y }} {% endfor %}"

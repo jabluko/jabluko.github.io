@@ -8,7 +8,6 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'username']
 
 class BackgroundSerializer(serializers.ModelSerializer):
-    """Prosty serializer do wyświetlania info o tle w trasie."""
     class Meta:
         model = Background
         fields = ['id', 'title', 'image']
