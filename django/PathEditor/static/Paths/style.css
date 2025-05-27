@@ -1,0 +1,37 @@
+body {
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    min-height: 100vh;
+    font-family: sans-serif;
+}
+.content {
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.8);
+    margin: 20px;
+    border-radius: 8px;
+}
+nav {
+     background-color: #333;
+     padding: 10px;
+     color: white;
+}
+nav a {
+    color: white;
+    margin: 0 10px;
+    text-decoration: none;
+}
+nav a:hover {
+    text-decoration: underline;
+}
+
+.point-indicator {
+    width: 16px;
+    height: 16px;
+    background: rgba(0, 128, 255, 0.7);
+    position: relative;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    z-index: 100;
+}

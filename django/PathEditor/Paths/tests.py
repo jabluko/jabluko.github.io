@@ -53,7 +53,7 @@ class APIEndpointTests(APITestCase):
         self.assertEqual(response.data[0]['title'], "Test Path")
 
     def test_create_path(self):
-        url = reverse('path-list')  # Assuming the PathViewSet is registered with a router
+        url = reverse('path-list')
         data = {
             'title': 'New Path',
             'background': self.background.id
@@ -63,7 +63,7 @@ class APIEndpointTests(APITestCase):
         self.assertEqual(response.data['title'], 'New Path')
 
     def test_update_path(self):
-        url = reverse('path-detail', kwargs={'pk': self.path.id})  # Assuming the PathViewSet is registered with a router
+        url = reverse('path-detail', kwargs={'pk': self.path.id})
         data = {
             'title': 'Updated Path',
             'background': self.background.id
@@ -73,13 +73,12 @@ class APIEndpointTests(APITestCase):
         self.assertEqual(response.data['title'], 'Updated Path')
 
     def test_delete_path(self):
-        url = reverse('path-detail', kwargs={'pk': self.path.id})  # Assuming the PathViewSet is registered with a router
+        url = reverse('path-detail', kwargs={'pk': self.path.id})
         response = self.client.delete(url, HTTP_AUTHORIZATION=f'Token {self.token.key}')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertFalse(Path.objects.filter(id=self.path.id).exists())
 
     def test_create_point(self):
-        # Use the correct route name for the nested router
         url = reverse('points-list', kwargs={'path_pk': self.path.id})
         data = {
             'x': 30,
@@ -93,7 +92,6 @@ class APIEndpointTests(APITestCase):
         self.assertEqual(response.data['order'], 2)
 
     def test_get_path_points(self):
-        # Use the correct route name for the nested router
         url = reverse('points-list', kwargs={'path_pk': self.path.id})
         response = self.client.get(url, HTTP_AUTHORIZATION=f'Token {self.token.key}')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -107,6 +105,7 @@ class APIEndpointTests(APITestCase):
 class APIEndpointSecurityTests(APITestCase):
     def setUp(self):
         self.user = User.objects.create_user(username='testuser', password='testpassword')
+        self.secretuser2=User.objects.create_user(username='secretuser', password='secretpassword')
         self.token = Token.objects.create(user=self.user)
         self.background = Background.objects.create(title="Test Background")
         self.path = Path.objects.create(title="Test Path", user=self.user, background=self.background)
@@ -120,7 +119,7 @@ class APIEndpointSecurityTests(APITestCase):
                         response.status_code == status.HTTP_401_UNAUTHORIZED)
 
     def test_create_path(self):
-        url = reverse('path-list')  # Assuming the PathViewSet is registered with a router
+        url = reverse('path-list')
         data = {
             'title': 'New Path',
             'background': self.background.id
@@ -130,7 +129,7 @@ class APIEndpointSecurityTests(APITestCase):
                         response.status_code == status.HTTP_401_UNAUTHORIZED)
 
     def test_update_path(self):
-        url = reverse('path-detail', kwargs={'pk': self.path.id})  # Assuming the PathViewSet is registered with a router
+        url = reverse('path-detail', kwargs={'pk': self.path.id})
         data = {
             'title': 'Updated Path',
             'background': self.background.id
@@ -140,13 +139,12 @@ class APIEndpointSecurityTests(APITestCase):
                         response.status_code == status.HTTP_401_UNAUTHORIZED)
 
     def test_delete_path(self):
-        url = reverse('path-detail', kwargs={'pk': self.path.id})  # Assuming the PathViewSet is registered with a router
+        url = reverse('path-detail', kwargs={'pk': self.path.id})
         response = self.client.delete(url)
         self.assertTrue(response.status_code == status.HTTP_400_BAD_REQUEST or
                         response.status_code == status.HTTP_401_UNAUTHORIZED)
 
     def test_create_point(self):
-        # Use the correct route name for the nested router
         url = reverse('points-list', kwargs={'path_pk': self.path.id})
         data = {
             'x': 30,
@@ -158,7 +156,6 @@ class APIEndpointSecurityTests(APITestCase):
                         response.status_code == status.HTTP_401_UNAUTHORIZED)
 
     def test_get_path_points(self):
-        # Use the correct route name for the nested router
         url = reverse('points-list', kwargs={'path_pk': self.path.id})
         response = self.client.get(url)
         self.assertTrue(response.status_code == status.HTTP_400_BAD_REQUEST or

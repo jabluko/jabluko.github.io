@@ -1,4 +1,5 @@
 {% extends 'Paths/base.html' %}
+{% load static %}
 
 {% block title %}Szczegóły Trasy: {{ route.title }}{% endblock %}
 
@@ -8,12 +9,13 @@
 <p><strong>Tło:</strong> {{ background.title }}</p>
 
 <h2>Wizualizacja Trasy</h2>
-<div style="margin-bottom: 20px; border: 1px solid #ccc; position: relative; display: inline-block;">
+<div id="background-img-container" style="margin-bottom: 20px; border: 1px solid #ccc; position: relative; display: inline-block;">
   <img id="background-img" src="{{ background.image.url }}" alt="Tło trasy {{ route.title }}"
     style="max-width: 100%; display: block;">
+  <script src="{% static 'Paths/pointOnBackground.js' %}?v={{ now }}"></script>
 
   {% if background.image.width and background.image.height %}
-  <svg width="100%" height="100%" viewBox="0 0 {{ background.image.width }} {{ background.image.height }}"
+  <svg id="svg" width="100%" height="100%" viewBox="0 0 {{ background.image.width }} {{ background.image.height }}"
     style="position: absolute; top: 0; left: 0; pointer-events: none;">
     {% if points|length > 1 %}
     <polyline points="{% for point in points %}{{ point.x }},{{ point.y }} {% endfor %}"
@@ -29,7 +31,7 @@
 <h2>Punkty trasy w kolejności</h2>
 
 {% if points %}
-<table border="1" style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+<table id="point_table" border="1" style="width: 100%; border-collapse: collapse; margin-top: 15px;">
   <thead>
     <tr>
       <th>X</th>

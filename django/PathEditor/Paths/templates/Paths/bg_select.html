@@ -5,20 +5,20 @@
 {% block content %}
 
     <form method="post">
-        {% csrf_token %} {# Zabezpieczenie CSRF #}
+        {% csrf_token %}
 
         <hr>
 
         <h2>Dostępne tła:</h2>
-        {% if background_images %}
+        {% if backgrounds %}
             <div style="display: flex; flex-wrap: wrap; gap: 20px;">
-                {% for bg in background_images %}
+                {% for background in backgrounds %}
                     <div style="border: 1px solid #eee; padding: 10px; text-align: center;">
-                        <label for="bg_{{ bg.id }}">
-                            <img src="{{ bg.image.url }}" alt="{{ bg.name }}" width="200" style="display: block; margin-bottom: 10px; cursor: pointer;">
-                            <input type="radio" name="background_id" value="{{ bg.id }}" id="bg_{{ bg.id }}"
-                                {% if current_background and current_background.id == bg.id %}checked{% endif %}>
-                            {{ bg.name }}
+                        <label for="background_{{ background.id }}">
+                            <img src="{{ background.image.url }}" alt="{{ background.name }}" width="200" style="display: block; margin-bottom: 10px; cursor: pointer;">
+                            <input type="radio" name="background_id" value="{{ background.id }}" id="background_{{ background.id }}"
+                                {% if current_background and current_background.id == background.id %}checked{% endif %}>
+                            {{ background.name }}
                         </label>
                     </div>
                 {% endfor %}

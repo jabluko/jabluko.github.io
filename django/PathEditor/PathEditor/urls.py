@@ -18,7 +18,6 @@ from django.contrib import admin
 from django.urls import include, path
 from django.conf import settings
 from django.conf.urls.static import static
-# --- Importy dla API ---
 from rest_framework.authtoken import views as authtoken_views
 from rest_framework.authtoken.views import obtain_auth_token
 from drf_yasg.views import get_schema_view

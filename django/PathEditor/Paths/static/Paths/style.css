@@ -4,7 +4,6 @@ body {
     background-repeat: no-repeat;
     background-attachment: fixed;
     min-height: 100vh;
-    margin: 0;
     font-family: sans-serif;
 }
 .content {
@@ -26,19 +25,14 @@ nav a {
 nav a:hover {
     text-decoration: underline;
 }
-.messages {
-    padding: 15px;
-    margin-bottom: 15px;
-    border: 1px solid transparent;
-    border-radius: 4px;
-}
-.messages.success {
-    color: #155724;
-    background-color: #d4edda;
-    border-color: #c3e6cb;
-}
- .messages.error {
-    color: #721c24;
-    background-color: #f8d7da;
-    border-color: #f5c6cb;
+
+.point-indicator {
+    width: 16px;
+    height: 16px;
+    background: rgba(0, 128, 255, 0.7);
+    position: absolute;
+    border: 2px solid #fff;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    z-index: 100;
 }
