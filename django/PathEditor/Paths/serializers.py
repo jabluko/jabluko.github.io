@@ -41,3 +41,11 @@ class PointCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Point
         fields = ['x', 'y', 'order']
+
+class BoardPointSerializer(serializers.Serializer):
+    row = serializers.IntegerField()
+    col = serializers.IntegerField()
+    color = serializers.CharField(max_length=16)
+
+class BoardPointsListSerializer(serializers.Serializer):
+    points = BoardPointSerializer(many=True)

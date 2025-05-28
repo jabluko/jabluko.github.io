@@ -5,12 +5,15 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.db.models import Max
 
-from .forms import PathForm, PathPointForm
-from .models import Background, Path, Point
+from .forms import PathForm, PathPointForm, BoardForm, GameBoard, BoardPointsForm
+from .models import Background, Path, Point, Dot
+from .serializers import BoardPointsListSerializer
 
 def home(request):
     if request.user.is_authenticated:
-        return redirect('path_list')
+        return render(request, 'Paths/main.html', {
+            'user': request.user
+        })
     return render(request, 'Paths/home.html')
 
 def background_show(request):
@@ -109,7 +112,6 @@ def path_detail(request, path_id):
         'background': path.background
     })
 
-
 @login_required
 def point_add(request, path_id):
     path = get_object_or_404(path, id=path_id, user=request.user)
@@ -138,6 +140,66 @@ def delete_path(request, path_id):
         path.delete()
         return redirect('path_list')
     return redirect('path_list')
+
+
+@login_required
+def board_create(request): 
+    if request.method == 'POST':
+        form = BoardForm(request.POST)
+        if form.is_valid():
+            board = form.save(commit=False)
+            board.user = request.user
+            board.name = form.cleaned_data['name']
+            board.rows = form.cleaned_data['rows']
+            board.cols = form.cleaned_data['cols']
+            board.save()
+            return redirect('board_detail', board_id=board.id)
+    else:
+        form = BoardForm()
+    return render(request, 'Paths/board_form.html', {'form': form})
+
+@login_required
+def board_detail(request, board_id):
+    board = get_object_or_404(GameBoard, id=board_id, user=request.user)
+    dots = board.dots.all()
+
+    if request.method == 'POST':
+        board_form = BoardPointsForm(request.POST)
+        if board_form.is_valid():
+            points_data = board_form.cleaned_data['points']
+            board.dots.all().delete()
+
+            
+            points = points_data
+            for point in points:
+                dot = Dot()
+                dot.row = point['row']
+                dot.col = point['col']
+                dot.color = point['color']
+                dot.board = board
+                dot.save()
+            return redirect('board_detail', board_id=board_id)
+    board_form = BoardForm()
+
+    return render(request, 'Paths/board_detail.html', {
+        'board': board,
+        'dots': dots,
+        'cols': board.cols,
+        'rows': board.rows,
+        'board_form': board_form,
+    })
+
+
+@login_required
+def board_list(request):
+    user = request.user
+    boards = GameBoard.objects.filter(user=user)
+
+    context = {
+        'boards': boards,
+    }
+    return render(request, 'Paths/board_list.html', context)
+    
 
 
 def register(request):

@@ -1,0 +1,23 @@
+{% extends 'Paths/base.html' %}
+
+{% block title %}Twoje Plansze{% endblock %}
+
+{% block content %}
+
+{% if boards %}
+    <span>Lista twoich plansz:</span>
+    <br>
+    <ul> {% for board in boards %}
+        <li>
+            <a href="{% url 'board_detail' board.id %}">{{ board }} </a>
+        </li>
+    {% endfor %} </ul>
+
+{% else %}
+    <span>
+        Nie masz aktualnie żadnych planszy
+    </span>
+{% endif %}
+
+
+{% endblock %}
