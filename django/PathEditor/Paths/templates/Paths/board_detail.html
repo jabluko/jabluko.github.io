@@ -4,56 +4,118 @@
 {% block content %}
 
 <ul id="original-dots" style="display: none;">
-  {% for dot in dots %}
-  <li>
-    <div>{{ dot.row }}</div>
-    <div>{{ dot.col }}</div>
-    <div>{{ dot.color }}</div>
-  </li>
-  {% endfor %}
+    {% for dot in dots %}
+    <li>
+        <div>{{ dot.row }}</div>
+        <div>{{ dot.col }}</div>
+        <div>{{ dot.color }}</div>
+    </li>
+    {% endfor %}
 </ul>
 
-<script src="{% static 'Paths/board.js' %}?v={{ now }}"></script>
+<script src="{% static 'Paths/board.js' %}?v={{ now }}">
+</script>
 
 <div style="display: flex; gap: 20px">
-  <div id="board-container">
-    <table id="board-table">
-    </table>
-  </div>
-
-  <div>
-    width of the board: <span id="cols">{{ cols }}</span>
-    <br>
-    height of the board: <span id="rows">{{ rows }}</span>
-
-    <p>select color for the next points:</p>
-    <div id="color-selector">
-      <div class="color-line">
-        <div class="color-block" style="background-color: blue;"> </div>
-        <div class="color-text">blue</div>
-      </div>
-      <div class="color-line">
-        <div class="color-block" style="background-color: red;"> </div>
-        <div class="color-text">red</div>
-      </div>
+    <div id="board-container">
+        <table id="board-table">
+        </table>
     </div>
 
-    <div class="color-line">
-      <div class="color-text">Selected color: </div>
-      <div id="selected-color-name" class="color-text"> none </div>
-      <div id="selected-color-block" class="color-block"></div>
-    </div>
+    <div>
+        width of the board: <span id="cols">{{ cols }}</span>
+        <br>
+        height of the board: <span id="rows">{{ rows }}</span>
 
-  </div>
+        <p>select color for the next points:</p>
+        <div id="color-selector">
+            <div class="color-line">
+                <div class="color-block" style="background-color: blue;"> </div>
+                <div class="color-text">blue</div>
+            </div>
+            <div class="color-line">
+                <div class="color-block" style="background-color: red;"> </div>
+                <div class="color-text">red</div>
+            </div>
+        </div>
+
+        <div class="color-line">
+            <div class="color-text">Selected color: </div>
+            <div id="selected-color-name" class="color-text"> none </div>
+            <div id="selected-color-block" class="color-block"></div>
+        </div>
+
+    </div>
 
 </div>
 
 <form method="POST">
-  {% csrf_token %}
-  <textarea id="id_points" name="points"></textarea>
-  <button id="submit-button" type="submit" onclick="serialize_points()">Zapisz planszę</button>
+    {% csrf_token %}
+    <textarea id="id_points" name="points"></textarea>
+    <button id="submit-button" type="submit" onclick="serialize_points()">Zapisz planszę</button>
 </form>
 
 <button onclick="serialize_points()">Zapisz planszę</button>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+
+        let selected_color_name = document.getElementById("selected-color-name");
+        let selected_color_block = document.getElementById("selected-color-block");
+        function setColorSwitcher(child) {
+            const colorBlock = child.children[0];
+            const color = window.getComputedStyle(colorBlock).backgroundColor;
+            color_usage.set(color, 0);
+            console.log(color);
+            child.addEventListener("click", () => {
+                console.log("Color: " + color);
+                console.log("Current color: " + current_color);
+
+                if (current_color == color) {
+                    current_color = null;
+                    selected_color_name.textContent = "none";
+                    selected_color_block.style.backgroundColor = null;
+                    return
+                }
+
+                current_color = color;
+                console.log("Switched to: " + current_color);
+                selected_color_name.textContent = child.children[1].textContent;
+                selected_color_block.style.backgroundColor = color;
+            })
+        }
+
+        const color_selector = document.getElementById("color-selector");
+        if (!color_selector) {
+            console.error("color selector not found");
+        }
+        for (const child of color_selector.children) {
+            setColorSwitcher(child);
+        }
+
+
+        build_table();
+        add_previous_points();
+
+
+        function select_element(cell, row_number, col_number) {
+            if (current_color == null) {
+                remove_marker(cell, row_number, col_number);
+            } else {
+                add_marker(cell, row_number, col_number, current_color);
+            }
+            update_submit();
+        }
+
+        for (let i = 0; i < row_count; ++i) {
+            for (let j = 0; j < col_count; ++j) {
+                let element = table.children[i].children[j];
+                element.addEventListener("click", () => select_element(element, i, j));
+            }
+        }
+
+        
+    })
+</script>
 
 {% endblock %}

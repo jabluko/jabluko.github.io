@@ -25,4 +25,7 @@ urlpatterns = [
     path('boards/', views.board_list, name='board_list'),
     path('boards/new/', views.board_create, name='board_create'),
     path('boards/<int:board_id>/', views.board_detail, name='board_detail'),
+
+    path('allboards/', views.all_boards, name='allboard_list'),
+    path('board_draw/<int:board_id>', views.board_draw, name='board_draw'),
 ]

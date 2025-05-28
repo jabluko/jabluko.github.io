@@ -4,21 +4,6 @@ from django.db.models.signals import post_save
 from django.conf import settings
 from django.dispatch import receiver
 
-class GameBoard(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
-    rows = models.PositiveIntegerField()
-    cols = models.PositiveIntegerField()
-    
-class Dot(models.Model):
-    board = models.ForeignKey(GameBoard, on_delete=models.CASCADE, related_name='dots')
-    row = models.PositiveIntegerField()
-    col = models.PositiveIntegerField()
-    color = models.CharField(max_length=7) 
-
-class DotsJSON(models.Model):
-    dots = models.JSONField()
-
 class Background(models.Model):
     title = models.CharField(max_length=100)
     image = models.ImageField(upload_to="backgrounds")
@@ -37,6 +22,29 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.user.username
+
+class GameBoard(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    rows = models.PositiveIntegerField()
+    cols = models.PositiveIntegerField()
+    
+class Dot(models.Model):
+    board = models.ForeignKey(GameBoard, on_delete=models.CASCADE, related_name='dots')
+    row = models.PositiveIntegerField()
+    col = models.PositiveIntegerField()
+    color = models.CharField(max_length=7) 
+
+class DotsJSON(models.Model):
+    dots = models.JSONField()
+    
+class BoardPoint(models.Model):
+    board = models.ForeignKey(GameBoard, on_delete=models.CASCADE, related_name='board_points')
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='user_board_points')
+    row = models.PositiveIntegerField()
+    col = models.PositiveIntegerField()
+    order = models.PositiveBigIntegerField()
+
 
 
 def get_default_superuser():

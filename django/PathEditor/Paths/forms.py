@@ -1,5 +1,5 @@
 from django import forms
-from .models import Path, Point, Background, UserSelection, GameBoard, DotsJSON
+from .models import Path, Point, Background, UserSelection, GameBoard, DotsJSON, BoardPoint
 
 class PathForm(forms.ModelForm):
     class Meta:
@@ -42,3 +42,16 @@ class BoardForm(forms.ModelForm):
 
 class BoardPointsForm(forms.Form):
     points = forms.JSONField(label="JSON of points")
+
+class BoardPointForm(forms.ModelForm):
+    class Meta:
+        model = BoardPoint
+        fields = ['row', 'col']
+        labels = {
+            'row': 'Row number',
+            'col': 'Column number',
+        }
+        widgets = {
+            'row': forms.NumberInput(attrs={'style': 'width: 80px;', 'min': '0'}),
+            'col': forms.NumberInput(attrs={'style': 'width: 80px;', 'min': '0'}),
+        }

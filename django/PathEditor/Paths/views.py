@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.db.models import Max
 
-from .forms import PathForm, PathPointForm, BoardForm, GameBoard, BoardPointsForm
+from .forms import PathForm, PathPointForm, BoardForm, GameBoard, BoardPointsForm, BoardPointForm
 from .models import Background, Path, Point, Dot
 from .serializers import BoardPointsListSerializer
 
@@ -200,6 +200,38 @@ def board_list(request):
     }
     return render(request, 'Paths/board_list.html', context)
     
+@login_required
+def all_boards(request):
+    boards=GameBoard.objects.all()
+    return render(request, 'Paths/all_boards.html', {
+        'boards': boards
+    })
+
+@login_required
+def board_draw(request, board_id):
+    board = get_object_or_404(GameBoard, id=board_id)
+    board_points = board.board_points.filter(user=request.user.profile).order_by('order')
+    board_point_form = BoardPointForm(request.POST)
+    if request.method == 'POST':
+        if board_point_form.is_valid():
+            last_point_order = board_points.aggregate(Max('order'))['order__max']
+            next_order = (last_point_order or 0) + 1
+
+            new_point = board_point_form.save(commit=False)
+            new_point.board = board
+            new_point.order = next_order
+            new_point.save()
+            return redirect('board_draw', board_id=board_id)
+
+    dots = board.dots.all()
+    return render(request, 'Paths/board_draw.html', {
+        'board': board,
+        'points': board_points,
+        'dots': dots,
+        'cols': board.cols,
+        'rows': board.rows,
+        'point_form': board_point_form,
+    })
 
 
 def register(request):
