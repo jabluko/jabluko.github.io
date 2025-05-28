@@ -4,23 +4,23 @@
 {% block content %}
 
 <ul id="original-dots" style="display: none;">
-  {% for dot in dots %}
-  <li>
-    <div>{{ dot.row }}</div>
-    <div>{{ dot.col }}</div>
-    <div>{{ dot.color }}</div>
-  </li>
-  {% endfor %}
+    {% for dot in dots %}
+    <li>
+        <div>{{ dot.row }}</div>
+        <div>{{ dot.col }}</div>
+        <div>{{ dot.color }}</div>
+    </li>
+    {% endfor %}
 </ul>
 
-<ul id="points" style="display: none;">
-  {% for point in points %}
-  <li>
-    <div>{{ point.row }}</div>
-    <div>{{ point.col }}</div>
-    <div>{{ point.color }}</div>
-  </li>
-  {% endfor %}
+<ul id="given-points" style="display: none;">
+    {% for pp in ppts %}
+    <li>
+        <div>{{ pp.row }}</div>
+        <div>{{ pp.col }}</div>
+        <div>{{ pp.color }}</div>
+    </li>
+    {% endfor %}
 </ul>
 
 <script src="{% static 'Paths/board.js' %}?v={{ now }}"></script>
@@ -28,33 +28,81 @@
 <span id="cols" style="display:none">{{ cols }}</span>
 <span id="rows" style="display:none">{{ rows }}</span>
 
-<div style="display: flex; gap: 20px">
-  <div id="board-container">
-    <table id="board-table">
-    </table>
-  </div>
+<div style="width: fit; height: fit;">
+    <div id="board-container">
+        <table id="board-table">
+        </table>
+    </div>
+    <svg id="svg" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;">
+        <polyline id="polyline" points="" style="fill:none; stroke:red; stroke-width:3;" />
+    </svg>
 </div>
 
-<svg id="svg" width="100%" height="100%"
-  style="position: absolute; top: 0; left: 0; pointer-events: none;">
-  <polyline points=""style="fill:none; stroke:red; stroke-width:3;" />
-</svg>
 
 <hr style="margin-top: 30px;">
 <h3>Dodaj nowy punkt na koniec</h3>
 <form method="post">
-  {% csrf_token %}
-  {{ point_form.as_p }}
-  <button type="submit">Dodaj Punkt</button>
+    {% csrf_token %}
+    {{ point_form.as_p }}
+    <button type="submit">Dodaj Punkt</button>
 </form>
 
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    build_table();
-    add_previous_points();
+    let rect;
+    document.addEventListener("DOMContentLoaded", function () {
+        build_table();
+        add_previous_points();
+
+        let polyline = document.getElementById("polyline");
+        let points = document.getElementById("given-points");
+        let parsedPoints = "";
+
+        let el0 = table.children[0].children[0]
+        rect = el0.getBoundingClientRect();
+
+        let size = parseInt(rect.width)
+        console.log(size);
+        
+        let offsetx = parseInt(rect.left);
+        let offsety = parseInt(rect.top);
+        for (let i = 0; i < points.children.length; ++i) {
+            let data = points.children[i];
+            let row = parseInt(data.children[0].textContent);
+            let col = parseInt(data.children[1].textContent);
+
+            let coordx = (col + 0.5) * size + offsetx;
+            let coordy = (row + 0.5) * size + offsety;
+            //console.log(col, row);
+            console.log(coordx, coordy);
+            parsedPoints += coordx + ", " + coordy + " ";
+
+        }
+        polyline.setAttribute("points", parsedPoints);
 
 
-  });
+        const formRow = document.querySelector('input[name="row"]');
+        if (!formRow) {
+            console.error("formRow not found");
+        }
+        const formCol = document.querySelector('input[name="col"]');
+        if (!formCol) {
+            console.error("formCol not found");
+        }
+        const form = formCol.form;
+
+        for (let i = 0; i < row_count; ++i) {
+            let irow = table.children[i];
+            for (let j = 0; j < col_count; ++j) {
+                let ijel = irow.children[j];
+
+                ijel.addEventListener("click", function () {
+                    formRow.value = i.toString();
+                    formCol.value = j.toString();
+                    form.submit();
+                })
+            }
+        }
+    });
 </script>
 
 {% endblock %}

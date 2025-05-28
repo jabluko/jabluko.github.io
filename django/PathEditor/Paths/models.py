@@ -40,7 +40,7 @@ class DotsJSON(models.Model):
     
 class BoardPoint(models.Model):
     board = models.ForeignKey(GameBoard, on_delete=models.CASCADE, related_name='board_points')
-    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='user_board_points')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_board_points')
     row = models.PositiveIntegerField()
     col = models.PositiveIntegerField()
     order = models.PositiveBigIntegerField()

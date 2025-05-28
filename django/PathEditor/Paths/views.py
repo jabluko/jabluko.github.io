@@ -210,7 +210,7 @@ def all_boards(request):
 @login_required
 def board_draw(request, board_id):
     board = get_object_or_404(GameBoard, id=board_id)
-    board_points = board.board_points.filter(user=request.user.profile).order_by('order')
+    board_points = board.board_points.filter(user=request.user).order_by('order')
     board_point_form = BoardPointForm(request.POST)
     if request.method == 'POST':
         if board_point_form.is_valid():
@@ -220,13 +220,14 @@ def board_draw(request, board_id):
             new_point = board_point_form.save(commit=False)
             new_point.board = board
             new_point.order = next_order
+            new_point.user = request.user
             new_point.save()
             return redirect('board_draw', board_id=board_id)
 
     dots = board.dots.all()
     return render(request, 'Paths/board_draw.html', {
         'board': board,
-        'points': board_points,
+        'ppts': board_points,
         'dots': dots,
         'cols': board.cols,
         'rows': board.rows,
