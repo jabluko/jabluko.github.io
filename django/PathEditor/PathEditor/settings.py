@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'sim',
     'rest_framework',
     'rest_framework.authtoken',
     'drf_yasg',
@@ -131,6 +132,8 @@ MEDIA_ROOT = (
     os.path.join(BASE_DIR, 'media')
 )
 MEDIA_URL = '/media/'
+
+ASGI_APPLICATION = "core.asgi.application"
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/

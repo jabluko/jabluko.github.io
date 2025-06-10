@@ -5,6 +5,7 @@
         "noImplicitAny": true,
         "alwaysStrict": true,
         "outDir": "Paths/static/Paths",
+        "rootDir": "typescript",
         "sourceMap": true
     },
     "include": ["./typescript/**/*.ts"]

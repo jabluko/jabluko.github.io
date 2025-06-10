@@ -135,7 +135,7 @@ def point_delete(request, point_id):
 @login_required
 def delete_path(request, path_id):
     path = get_object_or_404(Path, id=path_id, user=request.user)
-    path_name = path.name
+    path_name = path.title
     if request.method == 'POST':
         path.delete()
         return redirect('path_list')

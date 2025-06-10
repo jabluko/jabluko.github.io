@@ -46,7 +46,6 @@ class BoardPoint(models.Model):
     order = models.PositiveBigIntegerField()
 
 
-
 def get_default_superuser():
     return User.objects.filter(is_superuser=True).first().id
 

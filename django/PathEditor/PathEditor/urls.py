@@ -40,6 +40,7 @@ urlpatterns = [
     path("Paths/", include("Paths.urls")),
 
     path('api/', include('Paths.api_urls')),
+    path('sse/', include('Paths.sse_urls')),
     path('api/auth-token/', authtoken_views.obtain_auth_token, name='api_auth_token'),
 
     path('swagger<format>/', schema_view.without_ui(cache_timeout=0), name='schema-json'),

@@ -1,6 +1,7 @@
 from django.urls import path
 
 from . import views
+from . import sse_views
 
 from django.contrib import admin
 from django.urls import path, include
@@ -19,7 +20,7 @@ urlpatterns = [
     path('paths/<int:path_id>/', views.path_detail, name='path_detail'),
     path('paths/<int:path_id>/add_point/', views.point_add, name='point_add'),
     path('points/<int:point_id>/delete/', views.point_delete, name='point_delete'),
-    path('paths/<int:route_id>/delete/', views.delete_path, name='delete_path'),
+    path('paths/<int:path_id>/delete/', views.delete_path, name='delete_path'),
     path('register/', views.register, name='register'),
 
     path('boards/', views.board_list, name='board_list'),

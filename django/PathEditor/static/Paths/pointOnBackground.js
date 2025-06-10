@@ -50,14 +50,10 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         const rect = image.getBoundingClientRect();
         const containerRect = container.getBoundingClientRect();
-        const scaleX = image.width / image.naturalWidth;
-        const scaleY = image.height / image.naturalHeight;
-        const left = x * scaleX;
-        const top = y * scaleY;
         indicator = document.createElement("div");
         indicator.className = "point-indicator";
-        indicator.style.left = `${left}px`;
-        indicator.style.top = `${top}px`;
+        indicator.style.left = `${x}px`;
+        indicator.style.top = `${y}px`;
         container.appendChild(indicator);
     }
     function hideIndicator() {
@@ -80,7 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const x = parseFloat(xCell.textContent || "0");
         const y = parseFloat(yCell.textContent || "0");
         row.addEventListener("mouseover", () => showIndicator(x, y));
-        //row.addEventListener("mouseout", hideIndicator);
+        row.addEventListener("mouseout", hideIndicator);
         row.addEventListener("click", () => showIndicator(x, y));
     });
 });

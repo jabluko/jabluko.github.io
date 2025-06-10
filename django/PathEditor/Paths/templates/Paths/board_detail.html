@@ -37,6 +37,14 @@
                 <div class="color-block" style="background-color: red;"> </div>
                 <div class="color-text">red</div>
             </div>
+            <div class="color-line">
+                <div class="color-block" style="background-color: green;"> </div>
+                <div class="color-text">green</div>
+            </div>
+            <div class="color-line">
+                <div class="color-block" style="background-color: yellow;"> </div>
+                <div class="color-text">yellow</div>
+            </div>
         </div>
 
         <div class="color-line">
@@ -51,11 +59,9 @@
 
 <form method="POST">
     {% csrf_token %}
-    <textarea id="id_points" name="points"></textarea>
+    <textarea style="display: none;" id="id_points" name="points"></textarea>
     <button id="submit-button" type="submit" onclick="serialize_points()">Zapisz planszę</button>
 </form>
-
-<button onclick="serialize_points()">Zapisz planszę</button>
 
 <script>
     document.addEventListener("DOMContentLoaded", () => {
