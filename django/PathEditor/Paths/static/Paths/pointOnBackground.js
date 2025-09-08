@@ -23,7 +23,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     image.addEventListener("click", function (event) {
         let x, y;
-        // Use offsetX/offsetY if available, otherwise calculate manually
         if (typeof event.offsetX === "number" && typeof event.offsetY === "number") {
             x = event.offsetX;
             y = event.offsetY;
@@ -33,7 +32,6 @@ document.addEventListener("DOMContentLoaded", () => {
             x = event.clientX - rect.left;
             y = event.clientY - rect.top;
         }
-        // Update form fields
         if (formX)
             formX.value = x.toString();
         if (formY)

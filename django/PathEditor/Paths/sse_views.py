@@ -5,7 +5,6 @@ import threading
 import queue
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.contrib.auth.models import User # Import User model for creator_username/user_username
 from .models import Path, GameBoard
 
 from django.http import StreamingHttpResponse
